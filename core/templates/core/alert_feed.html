@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Alerts Feed</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px;}
+        table { width: 100%; border-collapse: collapse; margin-top: 20px;}
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left;}
+        th { background: #eee;}
+        .high { background: #f8d7da; }
+        .medium { background: #fff3cd; }
+        .low { background: #d4edda; }
+    </style>
+</head>
+<body>
+    <h1>Security Alerts Feed</h1>
+    <table>
+        <tr>
+            <th>Time</th>
+            <th>User</th>
+            <th>Event</th>
+            <th>Rule</th>
+            <th>Severity</th>
+            <th>Description</th>
+            <th>Status</th>
+        </tr>
+        {% for alert in alerts %}
+        <tr class="{{ alert.severity }}">
+            <td>{{ alert.created_at|date:"Y-m-d H:i:s" }}</td>
+            <td>{{ alert.event.user.username }}</td>
+            <td>{{ alert.event.event_type }}</td>
+            <td>{{ alert.rule_name }}</td>
+            <td>{{ alert.severity|title }}</td>
+            <td>{{ alert.description }}</td>
+            <td>
+    {% if alert.resolved %}
+        Resolved (<a href="{% url 'resolve-alert' alert.id %}">Undo</a>)
+    {% else %}
+        Active (<a href="{% url 'resolve-alert' alert.id %}">Mark Resolved</a>)
+    {% endif %}
+    {% if alert.severity == "high" %}
+        <br>
+        {% if alert.event.user.userprofile.is_security_locked %}
+            <b>LOCKED</b> (<a href="{% url 'unlock-user' alert.event.user.id %}">Verify & Unlock</a>)
+        {% endif %}
+    {% endif %}
+</td>
+
+
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
