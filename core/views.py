@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.mail import mail_admins
-
+import random
+from django.contrib import messages
 
 def alert_feed(request):
     alerts = Alert.objects.select_related('event').order_by('-created_at')[:50]
@@ -73,9 +74,13 @@ class EventIngestAPIView(APIView):
                     profile = event.user.userprofile
                     profile.is_security_locked = True
                     profile.last_locked_alert = alert
+                    # Generate 6-digit otp
+                    otp = f"{random.randint(100000, 999999)}"
+                    profile.otp_code = otp
+                    profile.otp_created_at = timezone.now()
                     profile.save()
                     notify_admin_via_email(alert)
-                    print(f"SECURITY NOTICE: User {event.user.username} locked for verification. Awaiting user verification or admin action.")
+                    print(f"SECURITY NOTICE: User {event.user.username} locked for verification. Awaiting user verification or admin action. OTP to unlock: {otp}")
         #if the event is a login from a new location
         if event.event_type == "login":
             location = event.location
@@ -158,4 +163,29 @@ def unlock_user(request, user_id):
         profile.last_locked_alert.resolved = True
         profile.last_locked_alert.save()
     return redirect('alert-feed')
+
+
+def user_unlock_view(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    profile = user.userprofile
+    error = None
+    unlocked = False
+
+    if request.method == "POST":
+        entered_otp = request.POST.get('otp', "")
+        now = timezone.now()
+        if profile.otp_code == entered_otp and (now- profile.otp_created_at).total_seconds() < 600:
+            profile.is_security_locked = False
+            profile.otp_code = None
+            profile.otp_created_at = None
+            profile.save()
+            unlocked = True
+        else:
+            error = "Invalid or expired OTP. Please try again."
+    return render(request, 'core/user_unlock.html',
+                  {"user_obj": user,
+                   "error": error,
+                   "unlocked": unlocked,
+                   "locked": profile.is_security_locked
+                   })
 

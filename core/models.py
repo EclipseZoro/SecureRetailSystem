@@ -56,6 +56,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_security_locked = models.BooleanField(default=False)
     last_locked_alert = models.ForeignKey('Alert', null=True, blank=True, on_delete=models.SET_NULL)
+    otp_code = models.CharField(max_length=8, blank=True, null=True)
+    otp_created_at = models.DateTimeField(null=True, blank=True)
+    
 
     def __str__(self):
         return f"{self.user.username} profile"

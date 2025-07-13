@@ -41,7 +41,10 @@
     {% if alert.severity == "high" %}
         <br>
         {% if alert.event.user.userprofile.is_security_locked %}
-            <b>LOCKED</b> (<a href="{% url 'unlock-user' alert.event.user.id %}">Verify & Unlock</a>)
+            <b>LOCKED</b> 
+            <br>
+            <a href="{% url 'user-unlock' alert.event.user.id %}">User Self-Unlock</a>
+            (<a href="{% url 'unlock-user' alert.event.user.id %}">Verify & Unlock</a>)
         {% endif %}
     {% endif %}
 </td>
