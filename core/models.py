@@ -48,6 +48,7 @@ class Alert(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     resolved = models.BooleanField(default=False)
     action_taken = models.CharField(max_length=128, blank=True)
+    user_disputed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.event.user.username} - {self.severity} - {self.description[:30]}"

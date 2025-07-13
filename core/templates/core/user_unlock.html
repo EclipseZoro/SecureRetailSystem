@@ -1,24 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Unlock Account</title>
-</head>
-<body>
-    <h2>Unlock Account for {{ user_obj.username }}</h2>
+{% extends "core/base.html" %}
+
+{% block title %}Unlock Account{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-center">Unlock Account for {{ user_obj.username }}</h2>
+    
     {% if unlocked %}
-        <p style="color: green;">Your account is now unlocked. You may continue using sensitive features.</p>
+        <div class="alert success">
+            Your account is now unlocked. You may continue using sensitive features.
+        </div>
     {% elif locked %}
         <form method="post">
             {% csrf_token %}
-            <label>Enter the OTP sent to your email/phone:</label><br>
-            <input type="text" name="otp" maxlength="8" required>
-            <button type="submit">Verify & Unlock</button>
+            
+            <div class="form-group">
+                <label for="otp">Enter the OTP sent to your email/phone:</label>
+                <input type="text" id="otp" name="otp" maxlength="8" required>
+            </div>
+            
+            <button type="submit" style="width: 100%;">Verify & Unlock</button>
         </form>
+        
         {% if error %}
-            <p style="color: red;">{{ error }}</p>
+        <div class="alert error mt-2">
+            {{ error }}
+        </div>
         {% endif %}
     {% else %}
-        <p>Your account is not locked.</p>
+        <div class="alert success">
+            Your account is not locked.
+        </div>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}

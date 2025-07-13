@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+
+{% block title %}Security Alert System{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>Welcome to Security Alert System</h1>
+    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">
+        Protecting your account and business from threats in real time.
+    </p>
+</div>
+
+<div class="card">
+    <h3>System Overview</h3>
+    <p>Our advanced security monitoring system continuously watches for suspicious activities and provides real-time alerts to keep your business safe.</p>
+    
+    <div class="mt-2">
+        <h4>Key Features:</h4>
+        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+            <li>Real-time threat detection</li>
+            <li>Automated security alerts</li>
+            <li>User behavior analysis</li>
+            <li>Account protection measures</li>
+        </ul>
+    </div>
+</div>
+
+{% if not user.is_authenticated %}
+<div class="text-center mt-2">
+    <a href="/login/" style="background-color: #3498db; color: white; padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; display: inline-block;">
+        Login to Dashboard
+    </a>
+</div>
+{% endif %}
+{% endblock %}

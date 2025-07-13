@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+
+{% block title %}Login - Security Alert System{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="text-center">Login</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Access Level</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="role" value="member" checked> Member
+                </label>
+                <label>
+                    <input type="radio" name="role" value="admin"> Admin
+                </label>
+            </div>
+        </div>
+        
+        <button type="submit" style="width: 100%;">Login</button>
+    </form>
+    
+    {% if error %}
+    <div class="alert error mt-2">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <div class="text-center mt-2">
+        <p>Don't have an account? <a href="/register/">Register here</a></p>
+    </div>
+</div>
+{% endblock %}
