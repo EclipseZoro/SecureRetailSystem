@@ -27,7 +27,7 @@ def register(request):
         else:
             user = User.objects.create_user(username=username, password=password)
             auth_login(request, user)
-            return redirect('memeber-dashboard')
+            return redirect('member-dashboard')
     return render(request, "core/register.html", {"error": error})
 
 def resolve_alert(request, alert_id):
