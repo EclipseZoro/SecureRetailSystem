@@ -132,7 +132,7 @@ This project provides a **real-time, automated security alert and response platf
 
 1. **Clone & Install**
     ```bash
-    git clone https://github.com/yourusername/security-alert-system.git
+    git clone https://github.com/EclipseZoro/SecureRetailSystem.git
     cd security-alert-system
     pip install -r requirements.txt
     ```
